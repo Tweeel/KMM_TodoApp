@@ -1,5 +1,6 @@
 package presentation.screens.home
 
+import ViewModelFactory
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import domain.TaskAction
@@ -41,12 +41,14 @@ import presentation.components.LoadingScreen
 import presentation.components.TaskView
 import presentation.screens.task.TaskScreen
 
-class HomeScreen: Screen {
+class HomeScreen(
+    val viewModel: HomeViewModel = ViewModelFactory().getViewModel<HomeViewModel>()
+): Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getScreenModel<HomeViewModel>()
+//        val viewModel = getScreenModel<HomeViewModel>()
         val activeTasks by viewModel.activeTasks
         val completedTasks by viewModel.completedTasks
 
@@ -79,7 +81,7 @@ class HomeScreen: Screen {
                     modifier = Modifier.weight(1f),
                     tasks = activeTasks,
                     onSelect = { selectedTask ->
-                        navigator.push(TaskScreen(selectedTask))
+                        navigator.push(TaskScreen(task = selectedTask))
                     },
                     onFavorite = { task, isFavorite ->
                         viewModel.setAction(

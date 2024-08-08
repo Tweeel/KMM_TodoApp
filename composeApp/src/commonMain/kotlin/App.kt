@@ -1,7 +1,10 @@
 import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.navigator.Navigator
 import cafe.adriel.voyager.transitions.SlideTransition
 import data.MongoDB
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import presentation.screens.home.HomeScreen
@@ -18,6 +21,15 @@ fun App() {
         }
     }
 }
+
+
+class ViewModelFactory : KoinComponent {
+    inline fun <reified  T: ScreenModel> getViewModel(): T {
+        val viewModel: T by inject()
+        return viewModel
+    }
+}
+
 
 val mongoModule = module {
     single { MongoDB() }

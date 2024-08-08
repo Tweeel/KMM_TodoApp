@@ -1,5 +1,6 @@
 package presentation.screens.task
 
+import ViewModelFactory
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
+//import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
 import domain.TaskAction
@@ -32,12 +33,15 @@ import domain.models.Task
 const val DEFAULT_TITLE = "Enter the Title"
 const val DEFAULT_DESCRIPTION = "Add some description"
 
-data class TaskScreen(val task: Task? = null) : Screen {
+data class TaskScreen(
+    val viewModel: TaskViewModel = ViewModelFactory().getViewModel<TaskViewModel>(),
+    val task: Task? = null
+) : Screen {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
-        val viewModel = getScreenModel<TaskViewModel>()
+//        val viewModel = getScreenModel<TaskViewModel>()
         var currentTitle by remember {
             mutableStateOf(task?.title ?: DEFAULT_TITLE)
         }
